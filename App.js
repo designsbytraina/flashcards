@@ -1,10 +1,14 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import DeckList from './components/DeckList';
+import DeckDetail from './components/DeckDetail';
+import QuizCard from './components/QuizCard';
+import { ltYellow } from './utils/colors';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <DeckList />
     </View>
   );
 }
@@ -12,8 +16,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E5EDB6',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: ltYellow,
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
 });
