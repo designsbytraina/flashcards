@@ -1,4 +1,59 @@
 import { AsyncStorage } from 'react-native';
+import { Notifications } from 'expo';
+import * as Permissions from 'expo-permissions';
+
+const NOTIFICATION_KEY = 'flashcards:notifications';
+
+export function clearLocalNotification() {
+  AsyncStorage.removeItem(NOTIFICATION_KEY)
+    .then(Notifications.cancelAllScheduledNotificationsAsync)
+}
+
+function createNotification() {
+  return {
+    title: 'Time to study!',
+    body: 'Don\'t forget to study today',
+    ios: {
+      sound: true
+    },
+    android: {
+      sound: true,
+      priority: 'high',
+      sticky: false,
+      vibrate: true
+    }
+  }
+}
+
+export function setLocalNotification () {
+  AsyncStorage.getItem(NOTIFICATION_KEY)
+    .then(JSON.parse)
+    .then((data) => {
+      if (data === null) {
+        Permissions.askAsync(Permissions.NOTIFICATIONS)
+          .then(({status}) => {
+            if (status === 'granted') {
+              Notifications.cancelAllScheduledNotificationsAsync()
+
+              let tomorrow = new Date();
+              tomorrow.setDate(tomorrow.getDate() + 1);
+              tomorrow.setHours(12);
+              tomorrow.setMinutes(0);
+
+              Notifications.scheduleLocalNotificationAsync(
+                createNotification(),
+                {
+                  time: tomorrow,
+                  repeat: 'day'
+                }
+              )
+
+              AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true))
+            }
+          })
+      }
+    })
+}
 
 /////////////////////////
 // - getDecks: return all decks as list of lists containing name and question count
@@ -15,8 +70,17 @@ export const getDecks = async () => {
   await AsyncStorage.multiGet(decks, (err, stores) => {
     stores.map((result, i, store) => {
       let key = store[i][0];
-      let value = JSON.parse(store[i][1]).questions.length;
-      decksInfo.push([key, value]);
+      if (key !== NOTIFICATION_KEY) {
+        let temp = JSON.parse(store[i][1]);
+        if (temp === null) {
+          temp = {questions:[]};
+        }
+        let value = 0;
+        if (typeof temp.questions !== 'undefined') {
+          value = temp.questions.length;
+        }
+        decksInfo.push([key, value]);
+      }
     })
   });
 
@@ -65,8 +129,8 @@ export const addCardToDeck = async ({id, question, answer}) => {
   try {
     getDeck(id).then( async (deck) => {
       deck.questions.push(_question);
-      await AsyncStorage.setItem(id, JSON.stringify(deck));
-      return _question
+      await AsyncStorage.setItem(id, JSON.stringify(deck)).then(() => console.log(deck))
+      return _question;
     } )
   } catch(e) {
     console.log(e)

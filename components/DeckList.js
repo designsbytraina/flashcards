@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform, FlatList, AsyncStorage } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
-import { getDecks } from '../utils/helpers';
+import { getDecks, clearLocalNotification, setLocalNotification } from '../utils/helpers';
 import { coral, rust, dkTeal, teal, ltTeal, white, ltYellow } from '../utils/colors';
 import DeckListCard from './DeckListCard';
 
@@ -26,6 +26,7 @@ class DeckList extends React.Component {
     // get data from async storage
     // AsyncStorage.clear();
     getDecks().then((decks) => this.setState({decks: decks}));
+    setLocalNotification();
   }
 
   handleCreateNew() {

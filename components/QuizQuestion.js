@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     color: white,
     padding: 10,
     fontWeight: '700',
-    marginLeft: 110
+    marginLeft: Platform.OS === 'ios' ? 110 : 150
   },
   touchableCard: {
     flexDirection: 'column',

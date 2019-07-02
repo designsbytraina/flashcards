@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     color: rust,
     padding: 10,
     fontWeight: '700',
-    marginLeft: 110
+    marginLeft: Platform.OS === 'ios' ? 110 : 150
   },
   addQuestionBtn: {
     backgroundColor: 'rgba(0,0,0, .2)',
