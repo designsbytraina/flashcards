@@ -57,18 +57,6 @@ class DeckListCard extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // padding: 20,
-    // backgroundColor: 'white'
-  },
-  createNew: {
-  },
-  topRow: {
-  },
-  iosSubmitBtn: {
-  },
-  AndroidSubmitBtn: {
-  },
-  submitBtnText: {
   },
   center: {
     flex: 1,
@@ -81,32 +69,20 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     color: white,
     flex: 1,
-    // alignItems: 'center',
     padding: 10,
     paddingTop: 20,
     paddingBottom: 20,
-    // marginTop: 10,
-    // marginBottom: 1,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.8,
     shadowRadius: 3,
-    backgroundColor: rust
+    backgroundColor: teal
   },
   touchableCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignSelf: 'auto'
   },
-  left: {
-    // flex: 2,
-    // flexDirection: 'row',
-    // flex:1
-  },
-  right: {
-    // flex: 1,
-    // flexDirection: 'row'
-  }
 })
 
 export default DeckListCard;

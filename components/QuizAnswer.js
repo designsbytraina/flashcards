@@ -112,27 +112,28 @@ class QuizAnswer extends React.Component {
     if (this.state.questions.length > 0) {
       return(
         <View style={styles.container}>
-          <TouchableOpacity>
+          <View style={{flexDirection: 'row'}}>
             <Text style={styles.backBtn}>
               {this.state.id}
             </Text>
-          </TouchableOpacity>
+            <Text style={styles.questionCount}>
+              {this.state.questions.length - (this.state.numCorrect + this.state.numIncorrect)} questions remaining
+            </Text>
+          </View>
           <View style={styles.center}>
             <Text style={styles.questionText}>{this.state.questions[this.state.currentQuestionIndex].answer}</Text>
           </View>
-          <View>
-            <View style={styles.showAnswerBtn}>
-              <View style={styles.left}>
-                <Text style={{color: coral, fontWeight:'700', fontSize: 20}}>how did you do?</Text>
-              </View>
-              <View style={styles.right}>
-                <TouchableOpacity style={styles.btn} onPress={this.handleCorrectAnswer}>
-                  <Text style={{color: 'green', fontWeight:'700', fontSize: 20}}>YAH</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.btn} onPress={this.handleWrongAnswer}>
-                  <Text style={{color: 'red', fontWeight:'700', fontSize: 20}}>NAH</Text>
-                </TouchableOpacity>
-              </View>
+          <View style={styles.showAnswerBtn}>
+            <View>
+              <Text style={{color: rust, fontWeight:'700', fontSize: 20, textAlign: 'center', paddingTop: 10}}>did you get it right?</Text>
+            </View>
+            <View style={styles.answerButtons}>
+              <TouchableOpacity style={styles.btn} onPress={this.handleCorrectAnswer}>
+                <Text style={{color: 'green', fontWeight:'700', fontSize: 20}}>YAH</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.btn} onPress={this.handleWrongAnswer}>
+                <Text style={{color: 'red', fontWeight:'700', fontSize: 20}}>NAH</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -146,23 +147,31 @@ class QuizAnswer extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // margin: 10,
-    // marginTop: 50,
-    // marginBottom: 50,
-    // backgroundColor: coral,
-    // borderColor: white,
-    // borderRadius: 5,
-    // borderWidth: 5
+
+  },
+  answerButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignSelf: 'stretch',
+    paddingLeft: 40,
+    paddingRight: 40
   },
   center: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 50,
-    marginRight: 50,
+    marginLeft: 5,
+    marginRight: 5,
   },
   showAnswerBtn: {
     backgroundColor: white,
+  },
+  questionCount: {
+    alignSelf: 'stretch',
+    color: rust,
+    padding: 10,
+    fontWeight: '700',
+    marginLeft: 110
   },
   addQuestionBtn: {
     backgroundColor: 'rgba(0,0,0, .2)',
@@ -171,24 +180,17 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingTop: 40,
     paddingBottom: 30,
-    // backgroundColor: teal
   },
   questionText: {
-    color: coral,
+    color: rust,
     fontSize: 25,
     textAlign: 'center'
   },
   backBtn: {
-    color: coral,
+    color: rust,
     padding: 10,
     fontWeight: '700'
   },
-  left: {
-    // flex: 1,
-  },
-  right: {
-    // flex: 1
-  }
 })
 
 export default QuizAnswer;

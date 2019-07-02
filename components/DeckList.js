@@ -67,22 +67,17 @@ class DeckList extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // padding: 20,
     backgroundColor: ltYellow
   },
   titleRow: {
     flexDirection: 'column',
     flex: 1,
     alignItems: 'center',
-    // color: '#00393B',
-    // backgroundColor: 'lightblue',
-    // textAlign: 'center',
     justifyContent: 'center',
     paddingTop: 40
   },
   titleText: {
     color: dkTeal,
-    // justifyContent: 'center'
     fontSize: 50,
     fontWeight: "700"
   },
@@ -94,10 +89,7 @@ const styles = StyleSheet.create({
   },
   createNewCard: {
     flexDirection: 'column',
-    // flex: 1,
-    // alignItems: 'center',
     padding: 10,
-    // height: 500,
     paddingTop: 30,
     paddingBottom: 30,
     backgroundColor: coral,
@@ -110,7 +102,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignSelf: 'auto'
-    // alignItems: 'stretch'
   },
   topRow: {
   },
@@ -134,11 +125,6 @@ const styles = StyleSheet.create({
   cardSection: {
     flexDirection: 'column',
     flex: 2,
-    // alignItems: 'center',
-    // padding: 10,
-    // marginTop: 10,
-    // marginBottom: 10,
-    // backgroundColor: 'red'
   }
 })
 

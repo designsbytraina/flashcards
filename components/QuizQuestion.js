@@ -60,26 +60,27 @@ class QuizQuestion extends React.Component {
     if (this.state.questions.length > 0) {
       return(
         <View style={styles.container}>
-          <TouchableOpacity>
+          <View style={{flexDirection: 'row'}}>
             <Text style={styles.backBtn}>
               {this.state.id}
             </Text>
-          </TouchableOpacity>
+            <Text style={styles.questionCount}>
+              {this.state.questions.length - (this.state.numCorrect + this.state.numIncorrect)} questions remaining
+            </Text>
+          </View>
           <View style={styles.center}>
             <Text style={styles.questionText}>{this.state.questions[this.state.currentQuestionIndex].question}?</Text>
           </View>
-          <View style={{}}>
-            <TouchableOpacity style={[styles.showAnswerBtn, styles.btn]} onPress={this.showAnswer}>
-              <View style={styles.left}>
-                <Text style={{color: white, fontWeight:'700', fontSize: 20}}>SHOW ANSWER</Text>
-              </View>
-              <View style={styles.right}>
+          <View style={styles.touchableCard}>
+            <View style={styles.answerButtons}>
+              <TouchableOpacity style={[styles.showAnswerBtn, styles.btn]} onPress={this.showAnswer}>
+                <Text style={{color: white, fontWeight:'700', fontSize: 20, paddingTop: 5, textAlign: 'center'}}>SHOW ANSWER</Text>
                 <Ionicons
                   name={Platform.OS === 'ios' ? 'ios-finger-print' : 'md-finger-print'}
-                  size={40} style={{color: white}}
+                  size={40} style={{color: white, alignSelf: 'center'}}
                 />
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       )
@@ -93,20 +94,14 @@ class QuizQuestion extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // margin: 10,
-    // marginTop: 50,
-    // marginBottom: 50,
-    // backgroundColor: coral,
-    // borderColor: white,
-    // borderRadius: 5,
-    // borderWidth: 5
   },
   center: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 50,
-    marginRight: 50,
+  },
+  answerButtons: {
+    alignSelf: 'stretch',
   },
   showAnswerBtn: {
     backgroundColor: 'rgba(0,0,0, .1)',
@@ -129,12 +124,18 @@ const styles = StyleSheet.create({
     padding: 10,
     fontWeight: '700'
   },
-  left: {
-    // flex: 1,
+  questionCount: {
+    alignSelf: 'stretch',
+    color: white,
+    padding: 10,
+    fontWeight: '700',
+    marginLeft: 110
   },
-  right: {
-    // flex: 1
-  }
+  touchableCard: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignSelf: 'auto'
+  },
 })
 
 export default QuizQuestion;

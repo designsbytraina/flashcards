@@ -66,10 +66,10 @@ class QuizComplete extends React.Component {
         </View>
         <View style={{}}>
           <View style={styles.showAnswerBtn}>
-            <View style={styles.left}>
-              <Text style={{color: white, fontWeight:'700', fontSize: 20}}>try again?</Text>
+            <View>
+              <Text style={{color: white, fontWeight:'700', fontSize: 20, textAlign: 'center', paddingTop: 10}}>try again?</Text>
             </View>
-            <View style={styles.right}>
+            <View style={styles.answerButtons}>
               <TouchableOpacity style={styles.btn} onPress={this.handleTryAgain}>
                 <Text style={{color: white, fontWeight:'700', fontSize: 20}}>YAH</Text>
               </TouchableOpacity>
@@ -87,13 +87,13 @@ class QuizComplete extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // margin: 10,
-    // marginTop: 50,
-    // marginBottom: 50,
-    // backgroundColor: coral,
-    // borderColor: white,
-    // borderRadius: 5,
-    // borderWidth: 5
+  },
+  answerButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignSelf: 'stretch',
+    paddingLeft: 40,
+    paddingRight: 40
   },
   center: {
     flex: 1,
@@ -104,7 +104,6 @@ const styles = StyleSheet.create({
   },
   titleText: {
     color: white,
-    // justifyContent: 'center'
     fontSize: 30,
     fontWeight: "700"
   },
@@ -125,7 +124,6 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingTop: 40,
     paddingBottom: 30,
-    // backgroundColor: teal
   },
   questionText: {
     color: white,
@@ -137,12 +135,6 @@ const styles = StyleSheet.create({
     padding: 10,
     fontWeight: '700'
   },
-  left: {
-    // flex: 1,
-  },
-  right: {
-    // flex: 1
-  }
 })
 
 export default QuizComplete;

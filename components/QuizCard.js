@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { getDeck } from '../utils/helpers';
-import { coral, rust, dkTeal, teal, ltTeal, white } from '../utils/colors';
+import { coral, rust, dkTeal, teal, ltTeal, white, ltYellow } from '../utils/colors';
 import QuizQuestion from './QuizQuestion';
 import QuizAnswer from './QuizAnswer';
 import QuizComplete from './QuizComplete';
@@ -23,7 +23,6 @@ class QuizCard extends React.Component {
     this.setState({id: _id});
 
     let checkQuestions = this.props.navigation.getParam('questions', []);
-    console.log(checkQuestions);
 
     if (checkQuestions !== []) {
       this.setState({questions: checkQuestions});
@@ -32,7 +31,6 @@ class QuizCard extends React.Component {
       if (typeof data.questions !== 'undefined') {
         this.setState({questions: data.questions});
       } else {
-        console.log('EMPTY')
         this.setState({questions: []})
       }
     }
@@ -45,52 +43,70 @@ class QuizCard extends React.Component {
 
     if (this.state.screen === 'addDeck') {
       return (
-        <View style={styles.addContainer}>
-          <NewDeck navigation={this.props.navigation} />
+        <View style={{backgroundColor: ltYellow, flex: 1}}>
+          <View style={styles.addContainer}>
+            <NewDeck navigation={this.props.navigation} />
+          </View>
         </View>)
 
     } else if (this.state.screen === 'startQuiz' || this.state.screen === 'question') {
       if (this.state.questions.length === 0) {
         return (
-          <View style={styles.addContainer}>
-            <View style={styles.center}>
-              <Text style={styles.centerText}>
-                This deck does not currently have any questions.
-              </Text>
+          <View style={{backgroundColor: ltYellow, flex: 1}}>
+            <View style={styles.addContainer}>
+              <View style={styles.center}>
+                <Text style={styles.centerText}>
+                  This deck does not currently have any questions.
+                </Text>
+              </View>
             </View>
           </View>
         )
       }
 
       return (
-        <View style={styles.questionContainer}>
-          <QuizQuestion questions={this.state.questions} navigation={this.props.navigation} />
+        <View style={{backgroundColor: ltYellow, flex: 1}}>
+          <View style={styles.questionContainer}>
+            <QuizQuestion questions={this.state.questions} navigation={this.props.navigation} />
+          </View>
         </View>)
 
     } else if (this.state.screen === 'answer') {
       return (
-        <View style={styles.answerContainer}>
-          <QuizAnswer questions={this.state.questions} navigation={this.props.navigation} />
+        <View style={{backgroundColor: ltYellow, flex: 1}}>
+          <View style={styles.answerContainer}>
+            <QuizAnswer questions={this.state.questions} navigation={this.props.navigation} />
+          </View>
         </View>)
 
     } else if (this.state.screen === 'complete') {
       return (
-        <View style={styles.questionContainer}>
-          <QuizComplete questions={this.state.questions} navigation={this.props.navigation} />
+        <View style={{backgroundColor: ltYellow, flex: 1}}>
+          <View style={styles.questionContainer}>
+            <QuizComplete questions={this.state.questions} navigation={this.props.navigation} />
+          </View>
         </View>)
 
     } else if (this.state.screen === 'addQuestion') {
       return (
-        <View style={styles.addContainer}>
-          <NewQuestion id={this.state.id} navigation={this.props.navigation} />
+        <View style={{backgroundColor: ltYellow, flex: 1}}>
+          <View style={styles.addContainer}>
+            <NewQuestion id={this.state.id} navigation={this.props.navigation} />
+          </View>
         </View>)
 
     } else {
-      // TODO: Render a 404 style default card
       return (
-        <View style={styles.addContainer}>
-          <NewDeck navigation={this.props.navigation} />
-        </View>)
+        <View style={{backgroundColor: ltYellow, flex: 1}}>
+          <View style={styles.questionContainer}>
+            <View style={styles.center}>
+              <Text style={styles.centerText}>
+                This page doesn't exist.
+              </Text>
+            </View>
+          </View>
+        </View>
+      )
     }
   }
 }
@@ -101,7 +117,7 @@ const styles = StyleSheet.create({
     margin: 10,
     marginTop: 50,
     marginBottom: 50,
-    backgroundColor: coral,
+    backgroundColor: rust,
     borderColor: white,
     borderRadius: 5,
     borderWidth: 5
@@ -112,7 +128,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     marginBottom: 50,
     backgroundColor: 'rgba(255,255,255,.8)',
-    borderColor: coral,
+    borderColor: rust,
     borderRadius: 5,
     borderWidth: 5
   },
@@ -160,12 +176,6 @@ const styles = StyleSheet.create({
     padding: 10,
     fontWeight: '700'
   },
-  left: {
-    // flex: 1,
-  },
-  right: {
-    // flex: 1
-  }
 })
 
 export default QuizCard;

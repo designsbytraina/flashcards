@@ -61,35 +61,37 @@ class DeckDetail extends React.Component {
 
   render() {
     return(
-      <View style={styles.container}>
-        <View style={styles.center}>
-          <Text style={styles.titleText}>{this.state.id}</Text>
-          <Text style={styles.subtitleText}>{this.state.questions.length} questions</Text>
-        </View>
-        <View style={{
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 1 },
-          shadowOpacity: 0.8,
-          shadowRadius: 3,
-          }}>
-          <TouchableOpacity style={[styles.startQuizBtn, styles.btn]} onPress={this.startQuiz}>
-            <Text style={{color: white, fontWeight:'700', fontSize: 20}}>START QUIZ</Text>
-            <Ionicons
-              name={Platform.OS === 'ios' ? 'ios-arrow-dropright-circle' : 'md-arrow-dropright-circle'}
-              size={40} style={{color: white}}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.addQuestionBtn, styles.btn]} onPress={this.addQuestion}>
-            <View style={styles.left}>
-              <Text style={{color: white, fontWeight:'700', fontSize: 20}}>ADD QUESTION</Text>
-            </View>
-            <View style={styles.right}>
+      <View style={{backgroundColor: ltYellow, flex: 1}}>
+        <View style={styles.container}>
+          <View style={styles.center}>
+            <Text style={styles.titleText}>{this.state.id}</Text>
+            <Text style={styles.subtitleText}>{this.state.questions.length} questions</Text>
+          </View>
+          <View style={{
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.8,
+            shadowRadius: 3,
+            }}>
+            <TouchableOpacity style={[styles.startQuizBtn, styles.btn]} onPress={this.startQuiz}>
+              <Text style={{color: white, fontWeight:'700', fontSize: 20}}>START QUIZ</Text>
               <Ionicons
                 name={Platform.OS === 'ios' ? 'ios-arrow-dropright-circle' : 'md-arrow-dropright-circle'}
                 size={40} style={{color: white}}
               />
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.addQuestionBtn, styles.btn]} onPress={this.addQuestion}>
+              <View>
+                <Text style={{color: white, fontWeight:'700', fontSize: 20}}>ADD QUESTION</Text>
+              </View>
+              <View>
+                <Ionicons
+                  name={Platform.OS === 'ios' ? 'ios-arrow-dropright-circle' : 'md-arrow-dropright-circle'}
+                  size={40} style={{color: white}}
+                />
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     )
@@ -99,13 +101,7 @@ class DeckDetail extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // margin: 10,
-    // marginTop: 50,
-    // marginBottom: 50,
     backgroundColor: teal,
-    // borderColor: white,
-    // borderRadius: 5,
-    // borderWidth: 5
   },
   center: {
     flex: 1,
@@ -130,7 +126,6 @@ const styles = StyleSheet.create({
   },
   titleText: {
     color: white,
-    // justifyContent: 'center'
     fontSize: 35,
     fontWeight: "700"
   },
@@ -145,12 +140,6 @@ const styles = StyleSheet.create({
     padding: 10,
     fontWeight: '700'
   },
-  left: {
-    // flex: 1,
-  },
-  right: {
-    // flex: 1
-  }
 })
 
 export default DeckDetail;

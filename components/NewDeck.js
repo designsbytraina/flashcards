@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import { saveDeckTitle } from '../utils/helpers';
@@ -40,7 +40,7 @@ class NewDeck extends React.Component {
         <Text style={styles.backBtn}>
           CREATE A NEW DECK
         </Text>
-        <View style={styles.center}>
+        <KeyboardAvoidingView style={styles.center} behavior='padding' enabled>
           <Text style={styles.deckTitleText}>what should we call it?</Text>
           <TextInput
             style={styles.textInput}
@@ -48,7 +48,7 @@ class NewDeck extends React.Component {
             onChangeText={(text)=> this.setState({title: text})}
           />
           <SubmitBtn onPress={this.submit} btnText='CREATE'/>
-        </View>
+        </KeyboardAvoidingView>
       </View>
     )
   }
@@ -57,13 +57,6 @@ class NewDeck extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // margin: 10,
-    // marginTop: 50,
-    // marginBottom: 50,
-    // backgroundColor: coral,
-    // borderColor: white,
-    // borderRadius: 5,
-    // borderWidth: 5
   },
   center: {
     flex: 1,
@@ -71,8 +64,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 50,
     marginRight: 50,
-    // textAlign: 'left'
-    // flexDirection: 'row'
   },
   textInput: {
     width: 250,
@@ -89,15 +80,11 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 3,
     height: 40,
-    // marginLeft: 40,
-    // marginRight: 40,
     alignSelf: 'flex-end'
   },
   AndroidSubmitBtn: {
     backgroundColor: dkTeal,
     padding: 10,
-    // paddingLeft: 30,
-    // paddingRight: 30,
     height: 40,
     borderRadius: 2,
     justifyContent: 'center',
@@ -117,24 +104,16 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingTop: 40,
     paddingBottom: 30,
-    // backgroundColor: teal
   },
   deckTitleText: {
     color: dkTeal,
     fontSize: 20,
-    // textAlign: 'left'
   },
   backBtn: {
     color: dkTeal,
     padding: 10,
     fontWeight: '700'
   },
-  left: {
-    // flex: 1,
-  },
-  right: {
-    // flex: 1
-  }
 })
 
 export default NewDeck;

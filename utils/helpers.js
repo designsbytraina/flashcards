@@ -30,40 +30,14 @@ export const getDeck = async (id) => {
   try {
     let deckDetails = await AsyncStorage.getItem(id);
     if (deckDetails !== null) {
-      // let key = store[i][0];
       deckResults = JSON.parse(deckDetails);
-      // decksInfo.push([key, value]);
-      // console.log(typeof JSON.parse(deckDetails));
-      // deckDetails = JSON.parse(deckDetails);
     }
   } catch(e) {
     console.log(e);
   }
   console.log(`getDeck(${id}) called`);
-  // console.log(deckResults)
   return deckResults;
 }
-
-// _retrieveData2 = async () => {
-//   try {
-//     const value = await AsyncStorage.getItem('<DECK TITLE>');
-//     if (value !== null) {
-//       // We have data!!
-//       console.log(value);
-//     }
-//   } catch (error) {
-//     // Error retrieving data
-//   }
-// };
-
-// getMyValue = async () => {
-//   try {
-//     const value = await AsyncStorage.getItem('@MyApp_key')
-//   } catch(e) {
-//     // read error
-//     console.log(e)
-//   }
-// }
 
 
 ////////////////////////////
@@ -78,25 +52,6 @@ export const saveDeckTitle = async (title) => {
   console.log(`saveDeckTitle(${title}) called`);
 }
 
-// setValue = async () => {
-//   try {
-//     await AsyncStorage.setItem('@MyApp_key', 'my secret value')
-//   } catch(e) {
-//     // save error
-//   }
-
-//   console.log('Done.')
-// }
-
-// _storeData = async () => {
-//   try {
-//     await AsyncStorage.setItem('@MySuperStore:key', 'I like to save it.');
-//   } catch (error) {
-//     // Error saving data
-//   }
-// };
-
-
 
 ///////////////////////////
 // - addCardToDeck: take in two arguments, title and card, and will add the card to the list of questions for the deck with the associated title.
@@ -109,12 +64,10 @@ export const addCardToDeck = async ({id, question, answer}) => {
 
   try {
     getDeck(id).then( async (deck) => {
-      // console.log(deck.questions);
       deck.questions.push(_question);
       await AsyncStorage.setItem(id, JSON.stringify(deck));
       return _question
     } )
-    // await AsyncStorage.mergeItem(id, JSON.stringify({}))
   } catch(e) {
     console.log(e)
   }
