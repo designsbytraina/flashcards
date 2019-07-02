@@ -1,30 +1,53 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { StackActions, NavigationActions } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
-import { getDecks } from '../utils/helpers';
+import { saveDeckTitle } from '../utils/helpers';
 import { coral, rust, dkTeal, teal, ltTeal, white } from '../utils/colors';
 import { SubmitBtn } from './SubmitBtn';
 
+
 class NewDeck extends React.Component {
-  componentDidMount() {
-    // TODO: get data from async storage
-    // getDecks
+  state = {
+    title: ''
   }
+
+  submit = () => {
+    const title = this.state.title;
+    if (title === '') {
+      alert('Please enter a new deck title.');
+      return
+    }
+    // add to asyncstorage
+    saveDeckTitle(title);
+    // navigate to new detail page for deck passing newly created id
+    const resetAction = StackActions.reset({
+      index: 1,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Home' }),
+        NavigationActions.navigate({
+          routeName: 'Details',
+          params: {id: title}
+        }),
+      ]
+    });
+    this.props.navigation.dispatch(resetAction);
+  }
+
   render() {
     return(
       <View style={styles.container}>
-        {/*<TouchableOpacity>*/}
-          <Text style={styles.backBtn}>
-            CREATE A NEW DECK
-          </Text>
-        {/*</TouchableOpacity>*/}
+        <Text style={styles.backBtn}>
+          CREATE A NEW DECK
+        </Text>
         <View style={styles.center}>
-          <Text style={styles.questionText}>what should we call it?</Text>
+          <Text style={styles.deckTitleText}>what should we call it?</Text>
           <TextInput
             style={styles.textInput}
             placeholder='title'
+            onChangeText={(text)=> this.setState({title: text})}
           />
-          <SubmitBtn btnText='CREATE'/>
+          <SubmitBtn onPress={this.submit} btnText='CREATE'/>
         </View>
       </View>
     )
@@ -96,7 +119,7 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
     // backgroundColor: teal
   },
-  questionText: {
+  deckTitleText: {
     color: dkTeal,
     fontSize: 20,
     // textAlign: 'left'

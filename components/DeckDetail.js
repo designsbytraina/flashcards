@@ -1,42 +1,85 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { NavigationActions } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import { getDecks } from '../utils/helpers';
-import { coral, rust, dkTeal, teal, ltTeal, white } from '../utils/colors';
+import { coral, rust, dkTeal, teal, ltTeal, white, ltYellow } from '../utils/colors';
+import { getDeck } from '../utils/helpers';
+
 
 class DeckDetail extends React.Component {
-  componentDidMount() {
-    // TODO: get data from async storage
-    // getDecks
+  state = {
+    id: '',
+    questions: []
   }
+
+  componentDidMount() {
+    const _id = this.props.navigation.getParam('id', '');
+    if (_id !== '') {
+      this.setState({id: _id})
+    }
+    // get data from async storage
+    const question = this.props.navigation.getParam('question', '');
+    const answer = this.props.navigation.getParam('answer', '');
+    getDeck(_id).then((data) => this.setState( (state) => ({id: _id, questions: state.questions.concat(data.questions)})));
+
+    if (this.props.navigation.getParam('question', '') !== '') {
+      this.setState((state) => ({questions: state.questions.concat([{
+        question: question,
+        answer: answer
+      }])}));
+    }
+  }
+
+  startQuiz = () => {
+    // load first question/redirect
+    const startQuizAction = NavigationActions.navigate({
+      routeName: 'StartQuiz',
+      params: {
+        screen: 'startQuiz',
+        id: this.state.id,
+        questions: this.state.questions,
+        numCorrect: 0,
+        numIncorrect: 0,
+        currentQuestionIndex: 0
+      }
+    });
+    this.props.navigation.dispatch(startQuizAction);
+  }
+
+  addQuestion = () => {
+    // navigate to add question View
+    const addQuestionAction = NavigationActions.navigate({
+      routeName: 'AddQuestion',
+      params: {
+        screen: 'addQuestion',
+        id: this.state.id
+      }
+    });
+    this.props.navigation.dispatch(addQuestionAction);
+  }
+
   render() {
     return(
       <View style={styles.container}>
-        <TouchableOpacity>
-          <Text style={styles.backBtn}>
-            <Ionicons
-                name={Platform.OS === 'ios' ? 'ios-arrow-dropleft' : 'md-arrow-dropleft'}
-                size={15} style={{color: white}}/>
-            BACK
-          </Text>
-        </TouchableOpacity>
         <View style={styles.center}>
-          <Text style={styles.titleText}>DECK TITLE</Text>
-          <Text style={styles.subtitleText}># questions</Text>
+          <Text style={styles.titleText}>{this.state.id}</Text>
+          <Text style={styles.subtitleText}>{this.state.questions.length} questions</Text>
         </View>
-        <View style={{}}>
-          <TouchableOpacity style={[styles.startQuizBtn, styles.btn]}>
-            <View style={styles.left}>
-              <Text style={{color: white, fontWeight:'700', fontSize: 20}}>START QUIZ</Text>
-            </View>
-            <View style={styles.right}>
-              <Ionicons
-                name={Platform.OS === 'ios' ? 'ios-arrow-dropright-circle' : 'md-arrow-dropright-circle'}
-                size={40} style={{color: white}}
-              />
-            </View>
+        <View style={{
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.8,
+          shadowRadius: 3,
+          }}>
+          <TouchableOpacity style={[styles.startQuizBtn, styles.btn]} onPress={this.startQuiz}>
+            <Text style={{color: white, fontWeight:'700', fontSize: 20}}>START QUIZ</Text>
+            <Ionicons
+              name={Platform.OS === 'ios' ? 'ios-arrow-dropright-circle' : 'md-arrow-dropright-circle'}
+              size={40} style={{color: white}}
+            />
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.addQuestionBtn, styles.btn]}>
+          <TouchableOpacity style={[styles.addQuestionBtn, styles.btn]} onPress={this.addQuestion}>
             <View style={styles.left}>
               <Text style={{color: white, fontWeight:'700', fontSize: 20}}>ADD QUESTION</Text>
             </View>
@@ -59,7 +102,7 @@ const styles = StyleSheet.create({
     // margin: 10,
     // marginTop: 50,
     // marginBottom: 50,
-    // backgroundColor: coral,
+    backgroundColor: teal,
     // borderColor: white,
     // borderRadius: 5,
     // borderWidth: 5
@@ -80,17 +123,20 @@ const styles = StyleSheet.create({
   btn: {
     padding: 10,
     paddingTop: 20,
-    paddingBottom: 20
+    paddingBottom: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignSelf: 'auto'
   },
   titleText: {
     color: white,
     // justifyContent: 'center'
-    fontSize: 40,
+    fontSize: 35,
     fontWeight: "700"
   },
   subtitleText: {
     color: white,
-    fontSize: 25,
+    fontSize: 20,
     padding: 10,
     textAlign: 'center'
   },

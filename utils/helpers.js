@@ -1,86 +1,123 @@
-import {AsyncStorage} from 'react-native';
+import { AsyncStorage } from 'react-native';
 
 /////////////////////////
-// - getDecks: return all of the decks along with their titles, questions, and answers.
-export function getDecks () {
-  //
-  return {}
+// - getDecks: return all decks as list of lists containing name and question count
+export const getDecks = async () => {
+  let decks = [];
+  try {
+    decks = await AsyncStorage.getAllKeys();
+  } catch(e) {
+    console.log(e);
+  }
+  console.log('getDecks() called');
+
+  let decksInfo = [];
+  await AsyncStorage.multiGet(decks, (err, stores) => {
+    stores.map((result, i, store) => {
+      let key = store[i][0];
+      let value = JSON.parse(store[i][1]).questions.length;
+      decksInfo.push([key, value]);
+    })
+  });
+
+  return decksInfo;
 }
 
-_retrieveData1 = async () => {
-  try {
-    const values = await AsyncStorage.getAllKeys();
-    if (values !== null) {
-      // We have data!!
-      console.log(values);
-    }
-  } catch (error) {
-    // Error retrieving data
-  }
-};
-
 /////////////////////////
-// - getDeck: take in a single id argument and return the deck associated with that id.
-
-_retrieveData2 = async () => {
+// - getDeck: take in a single id argument and return the deck associated with that id
+export const getDeck = async (id) => {
+  let deckResults = {};
   try {
-    const value = await AsyncStorage.getItem('<DECK TITLE>');
-    if (value !== null) {
-      // We have data!!
-      console.log(value);
+    let deckDetails = await AsyncStorage.getItem(id);
+    if (deckDetails !== null) {
+      // let key = store[i][0];
+      deckResults = JSON.parse(deckDetails);
+      // decksInfo.push([key, value]);
+      // console.log(typeof JSON.parse(deckDetails));
+      // deckDetails = JSON.parse(deckDetails);
     }
-  } catch (error) {
-    // Error retrieving data
+  } catch(e) {
+    console.log(e);
   }
-};
+  console.log(`getDeck(${id}) called`);
+  // console.log(deckResults)
+  return deckResults;
+}
+
+// _retrieveData2 = async () => {
+//   try {
+//     const value = await AsyncStorage.getItem('<DECK TITLE>');
+//     if (value !== null) {
+//       // We have data!!
+//       console.log(value);
+//     }
+//   } catch (error) {
+//     // Error retrieving data
+//   }
+// };
+
+// getMyValue = async () => {
+//   try {
+//     const value = await AsyncStorage.getItem('@MyApp_key')
+//   } catch(e) {
+//     // read error
+//     console.log(e)
+//   }
+// }
 
 
 ////////////////////////////
 // - saveDeckTitle: take in a single title argument and add it to the decks.
 
-_storeData = async () => {
+export const saveDeckTitle = async (title) => {
   try {
-    // figure out how to grab and set in AsyncStorage
-    const value = await AsyncStorage.getItem('<DECK TITLE>');
-
-    await AsyncStorage.setItem('questions', [{'question': 'answer'}]);
-  } catch (error) {
-    // Error saving data
+    await AsyncStorage.setItem(title, JSON.stringify({ title: title, questions: [] }));
+  } catch(e) {
+    console.log('ERROR: Problem saving deck title.');
   }
-};
+  console.log(`saveDeckTitle(${title}) called`);
+}
 
+// setValue = async () => {
+//   try {
+//     await AsyncStorage.setItem('@MyApp_key', 'my secret value')
+//   } catch(e) {
+//     // save error
+//   }
 
-// let UID123_object = {
-//   name: 'Chris',
-//   age: 30,
-//   traits: {hair: 'brown', eyes: 'brown'},
+//   console.log('Done.')
+// }
+
+// _storeData = async () => {
+//   try {
+//     await AsyncStorage.setItem('@MySuperStore:key', 'I like to save it.');
+//   } catch (error) {
+//     // Error saving data
+//   }
 // };
-// // You only need to define what will be added or updated
-// let UID123_delta = {
-//   age: 31,
-//   traits: {eyes: 'blue', shoe_size: 10},
-// };
 
-// AsyncStorage.setItem('UID123', JSON.stringify(UID123_object), () => {
-//   AsyncStorage.mergeItem('UID123', JSON.stringify(UID123_delta), () => {
-//     AsyncStorage.getItem('UID123', (err, result) => {
-//       console.log(result);
-//     });
-//   });
-// });
-
-// Console log result:
-// => {'name':'Chris','age':31,'traits':
-//    {'shoe_size':10,'hair':'brown','eyes':'blue'}}
 
 
 ///////////////////////////
 // - addCardToDeck: take in two arguments, title and card, and will add the card to the list of questions for the deck with the associated title.
 
-_storeData = async () => {
-  try {
-    await AsyncStorage.setItem('@MySuperStore:key', 'I like to save it.');
-  } catch (error) {
-    // Error saving data
+export const addCardToDeck = async ({id, question, answer}) => {
+  const _question = {
+    question: question,
+    answer: answer
   }
-};
+
+  try {
+    getDeck(id).then( async (deck) => {
+      // console.log(deck.questions);
+      deck.questions.push(_question);
+      await AsyncStorage.setItem(id, JSON.stringify(deck));
+      return _question
+    } )
+    // await AsyncStorage.mergeItem(id, JSON.stringify({}))
+  } catch(e) {
+    console.log(e)
+  }
+
+  console.log(`addCardToDeck({${id}, ${question}, ${answer}}) called`);
+}

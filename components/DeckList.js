@@ -1,15 +1,37 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform, FlatList, AsyncStorage } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { NavigationActions } from 'react-navigation';
 import { getDecks } from '../utils/helpers';
-import { coral, rust, dkTeal, teal, ltTeal, white } from '../utils/colors';
+import { coral, rust, dkTeal, teal, ltTeal, white, ltYellow } from '../utils/colors';
 import DeckListCard from './DeckListCard';
 
-class DeckList extends React.Component {
-  componentDidMount() {
-    // TODO: get data from async storage
-    // getDecks
+
+const createNewAction = NavigationActions.navigate({
+  routeName: 'AddDeck',
+  params: {
+    screen: 'addDeck'
   }
+});
+
+class DeckList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleCreateNew = this.handleCreateNew.bind(this);
+    this.state = {
+      decks: []
+    }
+  }
+  componentDidMount() {
+    // get data from async storage
+    // AsyncStorage.clear();
+    getDecks().then((decks) => this.setState({decks: decks}));
+  }
+
+  handleCreateNew() {
+    this.props.navigation.dispatch(createNewAction);
+  }
+
   render() {
     return(
       <View style={styles.container}>
@@ -19,22 +41,23 @@ class DeckList extends React.Component {
         </View>
         <View style={styles.cardSection}>
           <View style={styles.createNewCard}>
-           {/* TODO: onPress */}
-            <TouchableOpacity style={styles.createNew}>
-              <View style={styles.left}>
-                <Text style={{color: white, fontWeight:'700', fontSize: 18}}>CREATE NEW DECK</Text>
-              </View>
-              <View style={styles.right}>
-                <Ionicons
-                  name={Platform.OS === 'ios' ? 'ios-add-circle-outline' : 'md-add-circle-outline'}
-                  size={40} style={{color: white}}
-                />
-              </View>
+            <TouchableOpacity style={styles.createNew} onPress={this.handleCreateNew}>
+              <Text style={{color: white, fontWeight:'700', fontSize: 20, paddingTop: 5}}>CREATE NEW DECK</Text>
+              <Ionicons
+                name={Platform.OS === 'ios' ? 'ios-add-circle-outline' : 'md-add-circle-outline'}
+                size={40} style={{color: white}}
+              />
             </TouchableOpacity>
           </View>
-        {[1,2,3].map( (k) =>
-          <DeckListCard key={k} />
-          )}
+          {this.state.decks !== []
+            ? <FlatList
+                style={styles.deckList}
+                data={this.state.decks}
+                renderItem={ (item) => <DeckListCard item={item} navigation={this.props.navigation} /> }
+                keyExtractor={(item, index) => item.toString()}
+                />
+            : null
+          }
         </View>
       </View>
     )
@@ -45,7 +68,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // padding: 20,
-    // backgroundColor: 'white'
+    backgroundColor: ltYellow
   },
   titleRow: {
     flexDirection: 'column',
@@ -71,11 +94,12 @@ const styles = StyleSheet.create({
   },
   createNewCard: {
     flexDirection: 'column',
-    flex: 1,
+    // flex: 1,
     // alignItems: 'center',
     padding: 10,
-    paddingTop: 20,
-    paddingBottom: 20,
+    // height: 500,
+    paddingTop: 30,
+    paddingBottom: 30,
     backgroundColor: coral,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -83,6 +107,10 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   createNew: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignSelf: 'auto'
+    // alignItems: 'stretch'
   },
   topRow: {
   },
@@ -91,6 +119,10 @@ const styles = StyleSheet.create({
   AndroidSubmitBtn: {
   },
   submitBtnText: {
+  },
+  deckList: {
+    flexDirection: 'column',
+    flex: 1,
   },
   center: {
     flex: 1,
@@ -107,29 +139,6 @@ const styles = StyleSheet.create({
     // marginTop: 10,
     // marginBottom: 10,
     // backgroundColor: 'red'
-  },
-  card: {
-    flexDirection: 'column',
-    color: white,
-    flex: 1,
-    // alignItems: 'center',
-    padding: 10,
-    // marginTop: 10,
-    // marginBottom: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.8,
-    shadowRadius: 3,
-    backgroundColor: rust
-  },
-  left: {
-    // flex: 2,
-    // flexDirection: 'row',
-    // flex:1
-  },
-  right: {
-    // flex: 1,
-    // flexDirection: 'row'
   }
 })
 

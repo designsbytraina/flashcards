@@ -3,19 +3,44 @@ import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native
 import { Ionicons } from '@expo/vector-icons';
 import { getDecks } from '../utils/helpers';
 import { coral, rust, dkTeal, teal, ltTeal, white } from '../utils/colors';
+import { NavigationActions } from 'react-navigation';
+
 
 class DeckListCard extends React.Component {
-  componentDidMount() {
-    // TODO: get data from async storage
-    // getDecks
+  constructor(props) {
+    super(props);
+    this.handlePress = this.handlePress.bind(this);
+    this.state = {
+      id: '',
+      questionCount: 0
+    }
   }
+
+  handlePress() {
+    const navigateAction = NavigationActions.navigate({
+      routeName: 'Details',
+      params: {
+        id: this.state.id
+      }
+    });
+    this.props.navigation.dispatch(navigateAction);
+  }
+
+  componentDidMount() {
+    const id = this.props.item.item[0];
+    const questionCount = this.props.item.item[1];
+    this.setState({id: id, questionCount: questionCount});
+  }
+
   render() {
     return(
       <View style={styles.card}>
-        <TouchableOpacity style={styles.touchableCard}>
+        <TouchableOpacity
+          style={styles.touchableCard}
+          onPress={this.handlePress}>
           <View style={styles.left}>
-            <Text style={{color: white, fontWeight:'700', fontSize: 18}}>DECK TITLE</Text>
-            <Text style={{color: white, fontWeight:'700', fontSize: 15}}># questions in this deck</Text>
+            <Text style={{color: white, fontWeight:'700', fontSize: 20}}>{this.state.id}</Text>
+            <Text style={{color: white, fontWeight:'500', fontSize: 15}}>{this.state.questionCount} questions in this deck</Text>
           </View>
           <View style={styles.right}>
             <Ionicons
@@ -35,41 +60,6 @@ const styles = StyleSheet.create({
     // padding: 20,
     // backgroundColor: 'white'
   },
-  titleRow: {
-    flexDirection: 'column',
-    flex: 1,
-    alignItems: 'center',
-    // color: '#00393B',
-    // backgroundColor: 'lightblue',
-    // textAlign: 'center',
-    justifyContent: 'center',
-    paddingTop: 40
-  },
-  titleText: {
-    color: dkTeal,
-    // justifyContent: 'center'
-    fontSize: 50,
-    fontWeight: "700"
-  },
-  subtitleText: {
-    color: dkTeal,
-    fontSize: 15,
-    padding: 10,
-    textAlign: 'center'
-  },
-  createNewCard: {
-    flexDirection: 'column',
-    flex: 1,
-    // alignItems: 'center',
-    padding: 10,
-    paddingTop: 20,
-    paddingBottom: 20,
-    backgroundColor: coral,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.8,
-    shadowRadius: 3,
-  },
   createNew: {
   },
   topRow: {
@@ -87,21 +77,14 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     marginRight: 50,
   },
-  cardSection: {
-    flexDirection: 'column',
-    flex: 1,
-    // alignItems: 'center',
-    // padding: 10,
-    // marginTop: 10,
-    // marginBottom: 10,
-    // backgroundColor: 'red'
-  },
   card: {
     flexDirection: 'column',
     color: white,
     flex: 1,
     // alignItems: 'center',
     padding: 10,
+    paddingTop: 20,
+    paddingBottom: 20,
     // marginTop: 10,
     // marginBottom: 1,
     shadowColor: '#000',
@@ -109,6 +92,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 3,
     backgroundColor: rust
+  },
+  touchableCard: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignSelf: 'auto'
   },
   left: {
     // flex: 2,
